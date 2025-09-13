@@ -1,69 +1,110 @@
 
-# Shear Stress and Bending Moment 
+markdown
+Shear Stress & Bending Moment Calculator (C++)
 
-C++ project to calculate shear stress and bending moment for square beams under simply supported and cantilever cases with point/UDL loads. More sections like circular, T, and I will be added soon.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/sarthakmitkari/Shear-Stress-Bending-Moment-Calculator?style=social)]()
+[![GitHub forks](https://img.shields.io/github/forks/sarthakmitkari/Shear-Stress-Bending-Moment-Calculator?style=social)]()
 
 
-## Authors
+## About The Project
 
-- [@sarthakmitkari](https://github.com/sarthakmitkari)
+A **C++ console application** for calculating **shear stress** and **bending moment** of **square beams** under:
 
+- Simply supported beams or cantilever beams
+- Point loads (centered or offset)
+- Uniformly Distributed Loads (UDL) — fully or partially spanning
+
+Future versions will support extra beam sections such as circular, T-section, and I-section.
+
+---
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [How It Works](#how-it-works)
+- [Supported Cases](#supported-cases)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [About Me](#about-me)
+
+---
 
 ## Installation
 
-
-Installation
-Clone this repository and compile with a standard C++ compiler:
+Clone the repository and compile the project:
 
 ```
-git clone https://github.com/YourUsername/beam-calculator-cpp.git
-cd beam-calculator-cpp
-```
-```
+git clone https://github.com/sarthakmitkari/Shear-Stress-Bending-Moment-Calculator.git
+cd Shear-Stress-Bending-Moment-Calculator
 g++ -std=c++11 main.cpp -o beam_calculator
 ```
 
+---
+
 ## Usage
-Run the compiled executable:
-```bash
-  ./beam_calculator
+
+Run the executable:
+
+```
+./beam_calculator
 ```
 
+Follow the interactive console prompts to input beam parameters, load types, and section dimensions. The program will calculate and display shear stress and bending moment.
 
-## 🚀 About Me
-I'm Mechanical Engineer,
-I'm Interested in Designing .
-# Shear Stress and Bending Moment 
-
-C++ project to calculate shear stress and bending moment for square beams under simply supported and cantilever cases with point/UDL loads. More sections like circular, T, and I will be added soon.
-
-
-
+---
 
 ## How It Works
-- User selects whether to calculate shear stress or bending stress.
 
-- For bending stress, user either inputs a bending moment or inputs beam and load parameters to calculate it.
+- Choose whether to calculate **shear stress** or **bending stress**.
+- Enter given data or allow the program to compute bending moment or shear force.
+- Specify beam type (simply supported or cantilever).
+- Specify load type (point load or UDL).
+- Enter beam length, loading position, and beam section dimensions.
+- Program calculates moment of inertia and the requested stresses.
 
-- For shear stress, user inputs shear force or beam load details to calculate it.
-
-- User defines cross-section shape and dimensions (currently rectangle or circle).
-
-- Program calculates moment of inertia (MoI).
-
-- User inputs position (y) on the beam section for stresses calculation or uses defaults.
-
-- Program outputs calculated shear stress and bending moment (or bending stress).
+---
 
 ## Supported Cases
 
-```
-Beam Types:
-Simply Supported Beam
-Cantilever Beam
+- **Beam Types:**
+  - Simply Supported
+  - Cantilever
 
-Load Types:
-Point Load (option for center or other location)
-Uniformly Distributed Load (full span or partial)
-```
+- **Load Types:**
+  - Point Load (center or offset)
+  - Uniformly Distributed Load (full or partial span)
 
+---
+
+## Roadmap
+
+- Add support for circular, T-section, and I-section beams.
+- Improve UI and input validation.
+- Add graphical visualization of stress distribution.
+- Include unit tests and extend automated CI/CD workflow.
+
+---
+
+## Contributing
+
+Contributions are welcome! Feel free to fork the repository and submit pull requests. Please follow the standard GitHub flow for contributions.
+
+---
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## About Me
+
+Mechanical Engineer passionate about structural design and computational analysis.
+
+---
+
+Made with ❤️ by [sarthakmitkari](https://github.com/sarthakmitkari)
+```
