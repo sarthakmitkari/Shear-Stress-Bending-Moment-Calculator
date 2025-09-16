@@ -9,6 +9,13 @@ bool beam, center, typeofload, all;
 int BMGiven, IGiven, sigmaGiven, yGiven, loadGiven, spanGiven ,SFGiven, AsGiven, bGiven,ybarGiven;
 double bendingMoment, shearStress;
 
+void qavg(double sf, double sa){
+    shearStress = sf / sa;
+    cout << "Average Shear Stress is " << shearStress << " N/mm^2" << endl;
+    cout << "Maximum Shear Stress is " << (4.0/3.0) * shearStress << " N/mm^2" << endl;
+}
+
+
 int main() {
     cout<<"What you want to calculate?"<<endl;
     cout<<"1. Shear Stress"<<endl;
@@ -136,6 +143,14 @@ int main() {
                 cout << "Enter depth of rectangle: ";
                 cin >> depth;
                 MoI = (width * pow(depth,3)) / 12.0;}
+
+            else if (shapeOfBeam == 2){
+                cout << "You have selected Circle" << endl;
+                cout << "---------------------------------" << endl;
+                cout << "Enter diameter of circle: ";
+                cin >> depth;
+                MoI = (M_PI * pow(depth,4)) / 64.0;
+            }
       } 
         
       
@@ -307,8 +322,9 @@ int main() {
                 cout << "---------------------------------" << endl;
                 cout << "Enter diameter of circle in mm: ";
                 cin >> depth;
-                MoI = (M_PI * pow(depth,4)) / 64.0;
-                cout<< "Calculated Moment of Inertia (I) is "<<MoI<<" mm^4"<<endl;
+                double sa;
+                sa = M_1_PI * pow(depth,2) / 4.0;
+                qavg(SF*1000,sa);
             }
         }
 
