@@ -128,7 +128,11 @@ int main() {
         cout << "2. Moment of Inertia (I)? :"<<endl ;
         cout << "Enter 1:Yes or 0:No : "<<endl ;
         cin >> IGiven;
-        if (IGiven==0){
+        if (IGiven==1){
+            cout<<"Enter Moment of Inertia (I) in mm^4: ";
+            cin>>MoI;
+        }
+        else if (IGiven==0){
             cout << "Select shape of cross-section"<<endl;
             cout << "1. Rectangle" << endl;
             cout << "2. Circle" << endl;
@@ -400,6 +404,8 @@ int main() {
             width=width;
             cout<< "Width (b) is taken as "<<width<<endl;
         }
+
+        
         cout << "---------------------------------" << endl;
         cout<< "Calculating Shear Stress..."<<endl;
         cout << "Given Shear Force (F) is "<<(SF*1000)<<" N"<<endl;
