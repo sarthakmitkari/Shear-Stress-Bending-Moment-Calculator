@@ -1,424 +1,315 @@
+//Assignment No : 6
+//Name : Mitkari Sarthak Shivaraj
+//Roll No : A-61
 #include <iostream>
-#include<cmath>
+#include <cmath>
 using namespace std;
-
-int width, depth, y;
-int shapeOfBeam, rectangle,circle,stressSelected;
-double SF,BendingStress,MoI,As,yBar;
-bool beam, center, typeofload, all;
-int BMGiven, IGiven, sigmaGiven, yGiven, loadGiven, spanGiven ,SFGiven, AsGiven, bGiven,ybarGiven;
-double bendingMoment, shearStress;
-
-void qavg(double sf, double sa){
-    shearStress = sf / sa;
+// Function to calculate and display average and max shear stress
+void qavg(double sf, double sa) {
+    double shearStress = sf / sa;
     cout << "Average Shear Stress is " << shearStress << " N/mm^2" << endl;
-    cout << "Maximum Shear Stress is " << (4.0/3.0) * shearStress << " N/mm^2" << endl;
+    cout << "Maximum Shear Stress is " << (4.0 / 3.0) * shearStress << " N/mm^2" << endl;
 }
-
-
 int main() {
-    cout<<"What you want to calculate?"<<endl;
-    cout<<"1. Shear Stress"<<endl;
-    cout<<"2. Bending Stress"<<endl;
-    cout<<"Enter 1 or 2: ";
-    cin>>stressSelected;
-    if (stressSelected==2){
-        cout << "What is given?" << endl;
-        cout << "1. Bending Moment?" << endl;
-        cout << "Enter 1:Yes or 0:No : "<<endl;
+    // Beam Shear and Bending Stress Calculator
+    int width, depth, y;
+    int shapeOfBeam, stressSelected;
+    double SF, BendingStress, MoI, As, yBar;
+    double bendingMoment, shearStress;
+    bool beam, center, typeofload, all;
+    int BMGiven, IGiven, sigmaGiven, yGiven, SFGiven, AsGiven, bGiven, ybarGiven;
+
+    cout << "Beam Stress Calculator\n";
+    cout << "What do you want to calculate?\n1. Shear Stress\n2. Bending Stress\nEnter 1 or 2: ";
+    cin >> stressSelected;
+
+    if (stressSelected == 2) {
+        cout << "Is Bending Moment (M) given? (1:Yes, 0:No): ";
         cin >> BMGiven;
-        if (BMGiven==1){
-            cout<<"Enter Bending Moment (M) in kNm: ";
-            cin>>bendingMoment;
+        if (BMGiven == 1) {
+            cout << "Enter Bending Moment (M) in kNm: ";
+            cin >> bendingMoment;
         } else {
-            cout<<"Enter given data to calculate Bending Moment."<<endl;
-            cout<< "Enter type of beam enter 1 for simply supported, 0 for cantilever: ";
-            cin>>beam;
+            cout << "Enter type of beam (1 for simply supported, 0 for cantilever): ";
+            cin >> beam;
             double load, length;
             double a, b;
 
             if (beam) {  // Simply supported beam
-                cout << "Type of load enter 1 for point load, 0 for UDL: ";
+                cout << "Type of load (1 for point load, 0 for UDL): ";
                 cin >> typeofload;
-
                 if (typeofload) {  // Point Load
-                    cout << "Enter load (W) in kN: ";
+                    cout << "Enter load (kN): ";
                     cin >> load;
-                    cout << "Enter Span of Beam (L) in m: ";
+                    cout << "Enter span length (m): ";
                     cin >> length;
-                    spanGiven=length;
-                    cout << "Is the load at center? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load at center? (1:Yes, 0:No): ";
                     cin >> center;
-
                     if (center) {
-                        bendingMoment = (load * spanGiven) / 4;  // Max bending moment at center
-                    }
-                    else {
-                        cout << "Enter distance 'a' from left support to load in m: ";
+                        bendingMoment = (load * length) / 4.0;
+                    } else {
+                        cout << "Enter distance 'a' from left support (m): ";
                         cin >> a;
                         b = length - a;
-                        bendingMoment = (load * a * b) / length;  // Bending moment at distance 'a'
+                        bendingMoment = (load * a * b) / length;
                     }
-                }
-                else {  // UDL
-                    cout << "Enter load (W) in kN/m: ";
+                } else {  // UDL
+                    cout << "Enter load (kN/m): ";
                     cin >> load;
-                    cout << "Is the load covering entire span? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load covering entire span? (1:Yes, 0:No): ";
                     cin >> all;
-
                     if (all) {
-                        length=spanGiven;
-                        bendingMoment = (load * spanGiven * spanGiven) / 8;  // Max bending moment at center for full UDL
-                    }
-                    else {
-                        cout << "Enter distance 'a' from left support to start of load in m: ";
+                        cout << "Enter span length (m): ";
+                        cin >> length;
+                        bendingMoment = (load * length * length) / 8.0;
+                    } else {
+                        cout << "Enter span length (m): ";
+                        cin >> length;
+                        cout << "Enter distance 'a' from left support to start of load (m): ";
                         cin >> a;
-                        cout << "Enter distance 'b' from right support to end of load in m: ";
+                        cout << "Enter distance 'b' from right support to end of load (m): ";
                         cin >> b;
-                        // Shear at left support for partial UDL: Load * (length - b) * (length - b)/length
                         double loadLength = length - a - b;
                         bendingMoment = (load * loadLength * (length - b) * (length - b)) / (2 * length);
                     }
                 }
-            }
-            else {  // Cantilever beam
-                cout << "Enter Span of Beam (L) in m: ";
+            } else { // Cantilever beam
+                cout << "Enter span length (m): ";
                 cin >> length;
-                cout << "Type of load enter 1 for point load, 0 for UDL: ";
+                cout << "Type of load (1 for point load, 0 for UDL): ";
                 cin >> typeofload;
-
-                if (typeofload) {  // Point Load
-                    cout << "Enter load (W) in kN: ";
+                if (typeofload) { // Point load
+                    cout << "Enter load (kN): ";
                     cin >> load;
-
-                    cout << "Is the load at free end? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load at free end? (1:Yes, 0:No): ";
                     cin >> center;
-
                     if (center) {
-                        a = length ;
-                    }
-                    else {
-                        cout << "Enter distance 'a' from fixed support to load in m: ";
+                        a = length;
+                    } else {
+                        cout << "Enter distance 'a' from fixed support (m): ";
                         cin >> a;
                     }
-                    bendingMoment = load * a;  // Max bending moment at fixed end for cantilever
-                }
-                else {  // UDL
-                    cout << "Enter load (W) in kN/m: ";
+                    bendingMoment = load * a;
+                } else { // UDL
+                    cout << "Enter load (kN/m): ";
                     cin >> load;
-
-                    cout << "Is the load covering entire span? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load covering entire span? (1:Yes, 0:No): ";
                     cin >> all;
-
                     if (all) {
-                        bendingMoment = (load * length * length) / 2;  // Max bending moment at fixed end for full UDL
-                    }
-                    else {
-                        cout << "Enter distance 'a' from fixed support to start of load in m: ";
+                        bendingMoment = (load * length * length) / 2.0;
+                    } else {
+                        cout << "Enter distance 'a' from fixed support to start of load (m): ";
                         cin >> a;
-                        cout << "Enter distance 'b' from free end to end of load in m: ";
+                        cout << "Enter distance 'b' from free end to end of load (m): ";
                         cin >> b;
                         double loadLength = length - a - b;
-                        bendingMoment = load * loadLength * (length - b) / 2;
+                        bendingMoment = load * loadLength * (length - b) / 2.0;
                     }
                 }
             }
         }
 
-        cout << "2. Moment of Inertia (I)? :"<<endl ;
-        cout << "Enter 1:Yes or 0:No : "<<endl ;
+        cout << "Is Moment of Inertia (I) given? (1:Yes, 0:No): ";
         cin >> IGiven;
-        if (IGiven==1){
-            cout<<"Enter Moment of Inertia (I) in mm^4: ";
-            cin>>MoI;
-        }
-        else if (IGiven==0){
-            cout << "Select shape of cross-section"<<endl;
-            cout << "1. Rectangle" << endl;
-            cout << "2. Circle" << endl;
-            cout << "Enter 1 or 2: ";
+        if (IGiven == 1) {
+            cout << "Enter Moment of Inertia (I) in mm^4: ";
+            cin >> MoI;
+        } else {
+            cout << "Select shape of cross-section (1: Rectangle, 2: Circle): ";
             cin >> shapeOfBeam;
-
-            if (shapeOfBeam == 1){
-                cout << "You have selected Rectangle" << endl;
-                cout << "---------------------------------" << endl;
-                cout << "Enter width of rectangle: ";
+            if (shapeOfBeam == 1) {
+                cout << "Enter width (mm): ";
                 cin >> width;
-                cout << "Enter depth of rectangle: ";
+                cout << "Enter depth (mm): ";
                 cin >> depth;
-                MoI = (width * pow(depth,3)) / 12.0;}
-
-            else if (shapeOfBeam == 2){
-                cout << "You have selected Circle" << endl;
-                cout << "---------------------------------" << endl;
-                cout << "Enter diameter of circle: ";
+                MoI = (width * pow(depth, 3)) / 12.0;
+            } else if (shapeOfBeam == 2) {
+                cout << "Enter diameter (mm): ";
                 cin >> depth;
-                MoI = (M_PI * pow(depth,4)) / 64.0;
+                MoI = (M_PI * pow(depth, 4)) / 64.0;
             }
-      } 
-        
-      
-        cout << "3. Distance from neutral axis to point where bending stress is to be calculated (y)? :";
-        cout << "Enter 1:Yes or 0:For Ymax : ";
+        }
+
+        cout << "Is distance y from neutral axis given? (1:Yes, 0:No): ";
         cin >> yGiven;
-        if (yGiven==1){
-            cin >> yGiven;
+        if (yGiven == 1) {
+            cout << "Enter y (mm): ";
+            cin >> y;
         } else {
-            yGiven=depth/2;
-            cout<< "y is taken as "<<yGiven<<endl;
+            y = depth / 2;
+            cout << "y is taken as " << y << " mm\n";
         }
-      
-        cout << "4. Bending Stress (σ)? :";
-        cout << "Enter 1:Yes or 0:No : ";
+
+        cout << "Is Bending Stress (σ) given? (1:Yes, 0:No): ";
         cin >> sigmaGiven;
-        if (sigmaGiven==1){
+        if (sigmaGiven == 1) {
+            cout << "Enter Bending Stress (N/mm^2): ";
             cin >> BendingStress;
-            cout<< "Bending Stress is given as "<<BendingStress<<endl;
+            cout << "Bending Stress is given as " << BendingStress << " N/mm^2\n";
         } else {
-            cout << "---------------------------------" << endl;
-            cout<< "Calculating Bending Stress..."<<endl;
-            cout << "Given Bending Moment (M) is "<<(bendingMoment*1000000)<<" Nmm"<<endl;
-            cout << "Given Moment of Inertia (I) is "<<MoI<<" mm^4"<<endl;
-            cout << "Given distance y is "<<yGiven<<" mm"<<endl;
-            BendingStress = ((bendingMoment*1000000 )* yGiven) / MoI;
-            cout<< "Calculated Bending Stress is "<<BendingStress<<" N/mm^2"<<endl;
+            BendingStress = ((bendingMoment * 1e6) * y) / MoI;
+            cout << "Calculated Bending Stress is " << BendingStress << " N/mm^2\n";
         }
-    
-    } else if (stressSelected==1){
-        cout << "---------------------------------" << endl;
-
-
-        cout << "Shear stress Calculator"<<endl;
-        cout << "Enter the Given Data: "<<endl;
-        cout << "1. Shear Force " <<endl;
-        cout << "Enter 1:Yes or 0:No : "<<endl;
+    } else if (stressSelected == 1) {
+        cout << "Shear Stress Calculator\n";
+        cout << "Is Shear Force (SF) given? (1:Yes, 0:No): ";
         cin >> SFGiven;
         if (SFGiven == 1) {
-            cout << "Enter the value in KN: " << endl;
-            cin >>SF;
-        } else if (SFGiven == 0) {
-            cout << "Enter the given Data to find Shear Force "<<endl;
-            cout << "Enter the type of beam :"<<endl;
-            cout<< "Enter 1 for simply supported, 0 for cantilever: ";
+            cout << "Enter Shear Force (kN): ";
+            cin >> SF;
+        } else {
+            cout << "Enter type of beam (1:Simply supported, 0:Cantilever): ";
             cin >> beam;
-
-            double load, length;
-            double a, b;
-
-            cout << "Enter type of Load"<<endl;
-            cout<< "Enter 1 for point load, 0 for UDL: ";
+            cout << "Enter type of load (1:Point load, 0:UDL): ";
             cin >> typeofload;
-
-            if (beam) {  // Simply supported beam
-                cout << "Enter Span of Beam (L) in m: ";
+            double load, length, a, b;
+            if (beam) {
+                cout << "Enter span length (m): ";
                 cin >> length;
-
-                if (typeofload) {  // Point Load
-                    cout << "Enter load (W) in kN: ";
+                if (typeofload) {
+                    cout << "Enter load (kN): ";
                     cin >> load;
-
-                    cout << "Is the load at center? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load at center? (1:Yes, 0:No): ";
                     cin >> center;
-
                     if (center) {
-                        SF = load / 2.0;  // Shear force at supports
-                    }
-                    else {
-                        cout << "Enter distance 'a' from left support to load in m: ";
+                        SF = load / 2.0;
+                    } else {
+                        cout << "Enter distance 'a' from left support (m): ";
                         cin >> a;
                         b = length - a;
-                        SF = (load * b) / length;  // Shear force at left support
+                        SF = (load * b) / length;
                     }
-                }
-                else {  // UDL
-                    cout << "Enter load (W) in kN/m: ";
+                } else {
+                    cout << "Enter load (kN/m): ";
                     cin >> load;
-                    cout << "Is the load covering entire span? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load covering entire span? (1:Yes, 0:No): ";
                     cin >> all;
-
                     if (all) {
-                        SF = (load * length) / 2.0;  // Shear force at supports for full UDL
-                    }
-                    else {
-                        cout << "Enter distance 'a' from left support to start of load in m: ";
+                        SF = (load * length) / 2.0;
+                    } else {
+                        cout << "Enter distance 'a' from left support to start of load (m): ";
                         cin >> a;
-                        cout << "Enter distance 'b' from right support to end of load in m: ";
+                        cout << "Enter distance 'b' from right support to end of load (m): ";
                         cin >> b;
-                        // Shear at left support for partial UDL: Load * (length - b) * (length - b)/length
                         double loadLength = length - a - b;
                         SF = load * loadLength * (length - b) / length;
                     }
                 }
-            }
-            else {  // Cantilever beam
-                cout << "Enter Span of Beam (L) in m: ";
+            } else {
+                cout << "Enter span length (m): ";
                 cin >> length;
-
-                if (typeofload) {  // Point Load
-                    cout << "Enter load (W) in kN: ";
+                if (typeofload) {
+                    cout << "Enter load (kN): ";
                     cin >> load;
-
-                    cout << "Is the load at free end?"<<endl;
-                    cout << "1: Yes , 0: No: "<<endl;
+                    cout << "Is load at free end? (1:Yes, 0:No): ";
                     cin >> center;
-
                     if (center) {
-                        a = length ;
-                    }
-                    else {
-                        cout << "Enter distance 'a' from fixed support to load in m: ";
+                        a = length;
+                    } else {
+                        cout << "Enter distance 'a' from fixed support (m): ";
                         cin >> a;
                     }
-                    SF = load;  // Shear force at the fixed end equals the load for cantilever
-                }
-                else {  // UDL
-                    cout << "Enter load (W) in kN/m: ";
+                    SF = load;
+                } else {
+                    cout << "Enter load (kN/m): ";
                     cin >> load;
-
-                    cout << "Is the load covering entire span? Enter 1 for yes, 0 for no: ";
+                    cout << "Is load covering entire span? (1:Yes, 0:No): ";
                     cin >> all;
-
                     if (all) {
                         SF = load * length;
-                    }
-                    else {
-                        cout << "Enter distance 'a' from fixed support to start of load in m: ";
+                    } else {
+                        cout << "Enter distance 'a' from fixed support to start of load (m): ";
                         cin >> a;
-                        cout << "Enter distance 'b' from free end to end of load in m: ";
+                        cout << "Enter distance 'b' from free end to end of load (m): ";
                         cin >> b;
                         double loadLength = length - a - b;
                         SF = load * loadLength;
                     }
                 }
             }
-    
-            cout << "Calculated Shear Force: " << SF << " kN" << endl;
+            cout << "Calculated Shear Force: " << SF << " kN\n";
         }
-        
-        
-        cout << "---------------------------------" << endl;
 
-
-        cout << "2. Moment of Inertia (I)? :"<<endl ;
-        cout << "Enter 1:Yes or 0:No : " ;
+        cout << "Is Moment of Inertia (I) given? (1:Yes, 0:No): ";
         cin >> IGiven;
-        if (IGiven==1){
-            cout<<"Enter Moment of Inertia (I) in mm^4: ";
-            cin>>MoI;
+        if (IGiven == 1) {
+            cout << "Enter Moment of Inertia (I) in mm^4: ";
+            cin >> MoI;
         } else {
-            cout << "Select shape of cross-section"<<endl;
-            cout << "1. Rectangle" << endl;
-            cout << "2. Circle" << endl;
-            cout << "Enter 1 or 2: ";
+            cout << "Select shape of cross-section (1: Rectangle, 2: Circle): ";
             cin >> shapeOfBeam;
-
-            if (shapeOfBeam == 1){
-                cout << "You have selected Rectangle" << endl;
-                cout << "---------------------------------" << endl;
-                cout << "Enter width of rectangle in mm: ";
+            if (shapeOfBeam == 1) {
+                cout << "Enter width (mm): ";
                 cin >> width;
-                cout << "Enter depth of rectangle in mm: ";
+                cout << "Enter depth (mm): ";
                 cin >> depth;
-                MoI = (width * pow(depth,3)) / 12.0;
-                cout<< "Calculated Moment of Inertia (I) is "<<MoI<<" mm^4"<<endl;
-            } else if (shapeOfBeam == 2){
-                cout << "You have selected Circle" << endl;
-                cout << "---------------------------------" << endl;
-                cout << "Enter diameter of circle in mm: ";
+                MoI = (width * pow(depth, 3)) / 12.0;
+                cout << "Calculated Moment of Inertia (I) is " << MoI << " mm^4\n";
+            } else if (shapeOfBeam == 2) {
+                cout << "Enter diameter (mm): ";
                 cin >> depth;
-                double sa;
-                sa = M_1_PI * pow(depth,2) / 4.0;
-                qavg(SF*1000,sa);
+                double sa = M_1_PI * pow(depth, 2) / 4.0;
+                qavg(SF * 1000, sa);
             }
         }
 
-        cout << "---------------------------------" << endl;
-
-        cout << "3. Level at which shear stress is to be calculated (y)? :[If Known]"<< endl;
-        cout << "Enter 1:Yes or 0:For Ymax : ";
+        cout << "Is level y for shear stress known? (1:Yes, 0:No for ymax): ";
         cin >> yGiven;
-        if (yGiven==1){
-            cout<<"Enter the value in mm: ";
+        if (yGiven == 1) {
+            cout << "Enter y (mm): ";
             cin >> y;
         } else {
-            y=depth/2;
-            cout<< "y is taken as "<<y<<endl;
+            y = depth / 2;
+            cout << "y is taken as " << y << " mm\n";
         }
-        
-        cout << "---------------------------------" << endl;
 
-        cout << "4.Shadow Area (As)? :[If Known]"<<endl;
-        cout << "Enter 1:Yes or 0:No : ";
+        cout << "Is Shadow Area (As) known? (1:Yes, 0:No): ";
         cin >> AsGiven;
-        if (AsGiven==1){
+        if (AsGiven == 1) {
+            cout << "Enter Shadow Area (As) in mm^2: ";
             cin >> As;
-        } else if (AsGiven==0){ {
-            cout << "Calculating Shadow Area (As)..."<<endl;
-            cout << "Given width is "<<width<<" mm"<<endl;
-            cout << "Given depth is "<<depth<<" mm"<<endl;
-            cout << "Given y is "<<y<<" mm"<<endl;
-            if (y>depth/2){
-                cout<< "Error! y cannot be greater than depth/2"<<endl;
-            } else if(y==depth/2){
-                As = width * (depth/2);
-                cout<< "Calculated Shadow Area (As) is "<<As<<" mm^2"<<endl;
-            } else if(y<depth/2){ {
-                As = width * (depth/2 - y);
+        } else {
+            cout << "Calculating Shadow Area (As)...\n";
+            if (y > depth / 2) {
+                cout << "Error! y cannot be greater than depth/2\n";
+            } else if (y == depth / 2) {
+                As = width * (depth / 2);
+            } else {
+                As = width * (depth / 2 - y);
             }
-            cout<< "Calculated Shadow Area (As) is "<<As<<" mm^2"<<endl;
-        }
+            cout << "Calculated Shadow Area (As) is " << As << " mm^2\n";
         }
 
-        cout << "---------------------------------" << endl;
-
-        cout << "5. What is ybar?[If Known]"<<endl;
-        cout << "Enter 1:Yes or 0:No : ";
+        cout << "Is ybar known? (1:Yes, 0:No): ";
         cin >> ybarGiven;
-        if (ybarGiven==1){
-            cin >> y;
-        } else if(ybarGiven==0){
-            cout << "Enter the given Data to find ybar"<<endl;
-            cout << "Is the y at Neutral axis? Enter 1 for yes, 0 for no: ";
+        if (ybarGiven == 1) {
+            cout << "Enter ybar (mm): ";
+            cin >> yBar;
+        } else {
             int atNeutral;
+            cout << "Is ybar at neutral axis? (1:Yes, 0:No): ";
             cin >> atNeutral;
-            if (atNeutral==1){
-                yBar=depth/4;
-                cout<< "ybar is taken as "<<yBar<<endl;
-                }
-            else{
-                yBar=((depth/2 - y)/2)+y;
-                cout<< "ybar is taken as "<<yBar<<endl;
+            if (atNeutral == 1) {
+                yBar = depth / 4;
+            } else {
+                yBar = ((depth / 2 - y) / 2) + y;
             }
-            
+            cout << "ybar is taken as " << yBar << " mm\n";
         }
 
-        cout << "---------------------------------" << endl;
-
-
-        cout << "6. Width of section at level y (b)? [If Known]"<<endl;
-        cout << "Enter 1:Yes or 0:No : ";
+        cout << "Is width b at level y known? (1:Yes, 0:No): ";
         cin >> bGiven;
-        if (bGiven==1){
+        if (bGiven == 1) {
+            cout << "Enter width b (mm): ";
             cin >> width;
         } else {
-            width=width;
-            cout<< "Width (b) is taken as "<<width<<endl;
+            cout << "Width b is taken as " << width << " mm\n";
         }
 
-        
-        cout << "---------------------------------" << endl;
-        cout<< "Calculating Shear Stress..."<<endl;
-        cout << "Given Shear Force (F) is "<<(SF*1000)<<" N"<<endl;
-        cout << "Given Moment of Inertia (I) is "<<MoI<<" mm^4"<<endl;
-        cout << "Given Shadow Area (As) is "<<As<<" mm^2"<<endl;
-        cout << "Given distance ybar is "<<yBar<<" mm"<<endl;
-        cout << "Given width (b) is "<<width<<" mm"<<endl;
-        SF=SF*1000;
+        SF = SF * 1000; // convert kN to N
         shearStress = (SF * yBar * As) / (MoI * width);
-        cout<< "Calculated Shear Stress is "<<shearStress<<" N/mm^2"<<endl;
-
+        cout << "Calculated Shear Stress is " << shearStress << " N/mm^2\n";
     }
-}
-    
+
     return 0;
 }
